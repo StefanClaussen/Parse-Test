@@ -1,10 +1,6 @@
 //
 //  STCViewController.m
 //  Parse Test
-//
-//  Created by Stefan Claussen on 02/06/2014.
-//  Copyright (c) 2014 One foot after the other. All rights reserved.
-//
 
 #import "STCViewController.h"
 
@@ -18,6 +14,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
+    [testObject setObject:@"bar" forKey:@"foo"];
+    [testObject save];
 }
 
 - (void)didReceiveMemoryWarning
