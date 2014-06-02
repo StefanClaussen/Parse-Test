@@ -6,6 +6,8 @@
 
 @interface STCTableViewController ()
 
+@property (strong, nonatomic) NSMutableArray *credentials;
+
 @end
 
 @implementation STCTableViewController
@@ -28,6 +30,14 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    PFQuery *queryForCredentials = [PFQuery queryWithClassName:@"LoginCredentials"];
+    [queryForCredentials findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            self.credentials = [objects mutableCopy];
+            [self.tableView reloadData];
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -40,28 +50,28 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    return [self.credentials count];
 }
 
-/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
+    PFObject *loginCredentials = self.credentials[indexPath.row];
+    
+    cell.textLabel.text = loginCredentials[@"name"];
+    cell.detailTextLabel.text = loginCredentials[@"password"];
     
     return cell;
 }
-*/
 
 /*
 // Override to support conditional editing of the table view.
